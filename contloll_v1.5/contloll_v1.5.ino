@@ -19,8 +19,8 @@ int c = 6;
 int d = 5;
 
 
-int forward_limt = 15;
-int side_limt = 15;
+int forward_limt = 5;
+int side_limt = 5;
 
 // vars
 int thr_inp = 0;
@@ -29,6 +29,8 @@ int side_inp = 0;
 
 int motorSpeed1 = 0;  //variable to store motor speed:
 int motorSpeed2 = 0;
+int dir_f = 0;
+int dir_s = 0;
 
 
 void setup() {
@@ -52,7 +54,6 @@ void setup() {
   Serial.begin(9600);
 }
 
-
 void loop() {
 
   ch1 = pulseIn(2, HIGH, 3000);  //speed
@@ -66,9 +67,11 @@ void loop() {
   Serial.print(' ');
   Serial.print(ch3);
   Serial.print(' ');
+
   thr_inp = map(ch3, 1000, 2000, 0, 200);
   for_inp = map(ch1, 1000, 2000, -20, 20);
   side_inp = map(ch2, 1000, 2000, -20, 20);
+  
   Serial.print("m: ");
   Serial.print(thr_inp);
   Serial.print(' ');
@@ -80,6 +83,7 @@ void loop() {
 
   motorSpeed1 = 0;
   motorSpeed2 = 0;
+  
 
   if (enabled) {
     if (for_inp >= forward_limt) {
@@ -117,10 +121,7 @@ int mspeeds[9] = { 0, 25, 50, 100, 150, 200 };
 int mdelays[9] = { 100, 150, 300, 400, 500, 600 };
 
 void move() {
-  int idx = 0;
-  for (int x1 = 0; mspeeds[x1] >= abs(motorSpeed1); x1++) {
-    idx = x1;
-  }
+
   if (motorSpeed1 > 0) {
     digitalWrite(b, LOW);
     motorWriteh(a, mdelays[idx]);
@@ -140,6 +141,30 @@ void move() {
     digitalWrite(c, LOW);
     motorWriteh(d, mdelays[idx]);
   }
+
+  // int idx = 0;
+  // for (int x1 = 0; mspeeds[x1] >= abs(motorSpeed1); x1++) {
+  //   idx = x1;
+  // }
+  // if (motorSpeed1 > 0) {
+  //   digitalWrite(b, LOW);
+  //   motorWriteh(a, mdelays[idx]);
+
+  // } else {
+  //   digitalWrite(b, LOW);
+  //   motorWriteh(b, mdelays[idx]);
+  // }
+  // idx = 0;
+  // for (int x = 0; mspeeds[x] >= abs(motorSpeed2); x++) {
+  //   idx = x;
+  // }
+  // if (motorSpeed2 > 0) {
+  //   digitalWrite(d, LOW);
+  //   motorWriteh(c, mdelays[idx]);
+  // } else {
+  //   digitalWrite(c, LOW);
+  //   motorWriteh(d, mdelays[idx]);
+  // }
 
 
   // code to move the motor
@@ -176,23 +201,12 @@ void light(int l1) {
 void stop() {  //Stop:
   motorSpeed1 = 0;
   motorSpeed2 = 0;
-
-  light(1);
 }
 
 void motorWriteh(int p, int d) {
   digitalWrite(p, LOW);
   delay(10);
   digitalWrite(p, HIGH);
-  delay(d);
-  digitalWrite(p, LOW);
-  delay(10);
-}
-
-void motorWritel(int p, int d) {
-  digitalWrite(p, LOW);
-  delay(10);
-  digitalWrite(p, LOW);
   delay(d);
   digitalWrite(p, LOW);
   delay(10);

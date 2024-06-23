@@ -1,4 +1,5 @@
 
+double inp[3];
 
 void setup() {
   Serial.begin(9600); // Start serial communication at 9600 bps
@@ -9,26 +10,19 @@ void setup() {
 }
 
 void loop() {
+  inp[0] = pulseIn(2, HIGH, 2500);
+  inp[1] = pulseIn(3, HIGH, 2500);
+  inp[2] = pulseIn(4, HIGH, 2500);
   
-  double ch1 = pulseIn(2, HIGH, 4000);  //speed
-  double ch2 = pulseIn(3, HIGH, 4000);  //front-back
-  double ch3 = pulseIn(4, HIGH, 4000);  //side-side
-  
-  int channel1Value = analogRead(3); 
-  int channel2Value = analogRead(4); 
+
 
   Serial.print("ch: ");
-  Serial.print(ch1);
+  Serial.print(inp[0]);
   Serial.print(' ');
-  Serial.print(ch2);
+  Serial.print(inp[1]);
   Serial.print(' ');
-  Serial.print(ch3);
-  Serial.print(' ');
-
-  Serial.print("Analog ");
-  Serial.print(channel1Value);
-  Serial.print(' ');
-  Serial.println(channel2Value);
+  Serial.print(inp[2]);
+  Serial.print('\n');
 
   delay(100); // Wait for 100ms before reading again
 }
